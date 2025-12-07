@@ -23,7 +23,7 @@
 
 - [x] T001 Create `backend/`  directories at repository root
 - [x] T002 Initialize Python environment in `backend/` and create `backend/requirements.txt`
-- [x] T003 [P] Add core backend dependencies (`fastapi`, `uvicorn`, `qdrant-client`, `openai-agents`) to `backend/requirements.txt`
+- [x] T003 [P] Add core backend dependencies (`fastapi`, `uvicorn`, `qdrant-client`, `chatkit`) to `backend/requirements.txt`
 - [x] T004 [P] Initialize Node.js environment in `book-site/` and create `book-site/package.json` with basic `react` and `docusaurus` dependencies
 - [ ] T005 [P] Create `.env.example` file in `backend/` for API key configuration documentation
 - [ ] T006 [P] Create initial `backend/src/main.py` with basic FastAPI application setup
