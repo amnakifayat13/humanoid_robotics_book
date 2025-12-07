@@ -1,0 +1,88 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #007bff; /* A vibrant blue */
+  --ifm-color-primary-dark: #0069d9;
+  --ifm-color-primary-darker: #0062cc;
+  --ifm-color-primary-darkest: #0056b3;
+  --ifm-color-primary-light: #268dff;
+  --ifm-color-primary-lighter: #409bff;
+  --ifm-color-primary-lightest: #66b3ff;
+
+  --ifm-color-info: #17a2b8; /* Cyan for info blocks */
+  --ifm-color-danger: #dc3545; /* Red for warnings/danger */
+
+  /* Text and background colors for light mode */
+  --ifm-color-white: #ffffff;
+  --ifm-color-black: #000000;
+  --ifm-font-color-base: var(--ifm-color-black); /* Default text color */
+  --ifm-background-color: var(--ifm-color-white); /* Default background */
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #4dd0e1; /* Lighter cyan for dark mode primary */
+  --ifm-color-primary-dark: #00bcd4;
+  --ifm-color-primary-darker: #00acc1;
+  --ifm-color-primary-darkest: #0097a7;
+  --ifm-color-primary-light: #80deea;
+  --ifm-color-primary-lighter: #b2ebf2;
+  --ifm-color-primary-lightest: #e0f7fa;
+
+  --ifm-color-info: #66b3ff; /* Lighter blue for dark mode info */
+  --ifm-color-danger: #ef5350; /* Lighter red for dark mode danger */
+
+  /* Text and background colors for dark mode */
+  --ifm-color-white: #ffffff;
+  --ifm-color-black: #000000;
+  --ifm-font-color-base: var(--ifm-color-white); /* Default text color */
+  --ifm-background-color: var(--ifm-color-black); /* Default background */
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  /* Shiny agentic app design elements */
+  .hero--primary {
+    background: linear-gradient(135deg, var(--ifm-color-black) 0%, #00acc1 100%); /* Black to cyan gradient */
+    box-shadow: 0 8px 16px rgba(0, 200, 200, 0.4); /* Cyan glow */
+  }
+
+  .feature {
+    background-color: rgba(255, 255, 255, 0.05); /* Slightly visible cards */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 200, 200, 0.2); /* Subtle cyan shadow */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+
+  .feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 200, 200, 0.6); /* More prominent glow on hover */
+  }
+
+  .button {
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  }
+
+  .button--primary {
+    background-color: var(--ifm-color-primary);
+    color: var(--ifm-color-white);
+  }
+
+  .button--primary:hover {
+    background-color: var(--ifm-color-primary-dark);
+    transform: translateY(-2px);
+  }
+}

@@ -1,0 +1,26 @@
+# Node.js/Docusaurus
+node_modules/
+dist/
+build/
+*.log
+.env*
+coverage/
+
+# Python/ROS2
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Python
+dist/
+*.egg
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

@@ -1,0 +1,8 @@
+{
+  "label": "Book Overview",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "An overview of the Robotics & Physical AI book."
+  }
+}
