@@ -1,33 +1,25 @@
 <!-- Sync Impact Report:
-Version change: 0.0.0 -> 1.0.0 (MAJOR: Initial version from new user input)
-List of modified principles:
-  - Added: Accuracy
-  - Added: Coherence
-  - Added: Modularity
-  - Added: Transparency
-  - Added: Safety
-  - Added: Creativity with Discipline
+Version change: 1.0.0 -> 1.0.1 (MINOR: Added project workflow integration section)
+List of modified principles: N/A
 Added sections:
-  - Book Goals
-  - Writing Style Rules
-  - AI Collaboration Rules
+  - Project Workflow Integration
 Removed sections: N/A
 Templates requiring updates:
-  - .specify/templates/plan-template.md: ✅ updated
-  - .specify/templates/spec-template.md: ✅ updated
-  - .specify/templates/tasks-template.md: ✅ updated
-  - .specify/templates/commands/sp.analyze.md: ✅ updated
-  - .specify/templates/commands/sp.adr.md: ✅ updated
-  - .specify/templates/commands/sp.implement.md: ✅ updated
-  - .specify/templates/commands/sp.git.commit_pr.md: ✅ updated
-  - .specify/templates/commands/sp.constitution.md: ✅ updated
-  - .specify/templates/commands/sp.clarify.md: ✅ updated
-  - .specify/templates/commands/sp.checklist.md: ✅ updated
-  - .specify/templates/commands/sp.plan.md: ✅ updated
-  - .specify/templates/commands/sp.phr.md: ✅ updated
-  - .specify/templates/commands/sp.specify.md: ✅ updated
-  - .specify/templates/commands/sp.tasks.md: ✅ updated
-Follow-up TODOs: N/A
+  - .specify/templates/plan-template.md: ⚠ pending
+  - .specify/templates/spec-template.md: ⚠ pending
+  - .specify/templates/tasks-template.md: ⚠ pending
+  - .specify/templates/commands/sp.analyze.md: ⚠ pending
+  - .specify/templates/commands/sp.adr.md: ⚠ pending
+  - .specify/templates/commands/sp.implement.md: ⚠ pending
+  - .specify/templates/commands/sp.git.commit_pr.md: ⚠ pending
+  - .specify/templates/commands/sp.constitution.md: ⚠ pending
+  - .specify/templates/commands/sp.clarify.md: ⚠ pending
+  - .specify/templates/commands/sp.checklist.md: ⚠ pending
+  - .specify/templates/commands/sp.plan.md: ⚠ pending
+  - .specify/templates/commands/sp.phr.md: ⚠ pending
+  - .specify/templates/commands/sp.specify.md: ⚠ pending
+  - .specify/templates/commands/sp.tasks.md: ⚠ pending
+Follow-up TODOs: Update templates to reflect new Project Workflow Integration section
 -->
 # Humanoid Robotics & Physical AI Constitution
 
@@ -72,6 +64,11 @@ Address ethical implications of humanoids & embodied AI.
 - **Gemini** handles: factual accuracy, robotics physics, formulas, diagrams, examples.
 - SpecKit blends all outputs into consistent, high-quality content.
 
+## Project Workflow Integration
+- RAG Chatbot Engineering: Integrated RAG Chatbot using FastAPI backend, Qdrant Cloud Free Tier (vector DB), ChatKit (OpenAI Agents SDK), and Google Gemini text-embedding-3-small as the embedding model.
+- Data Pipeline: Markdown reader for book-site/docs, text conversion to clean plain text, chunking strategy with overlap, embedding generation, and Qdrant vector database integration.
+- @project_workflow: See rag-chatbot-spec.md for complete implementation details including backend structure, API endpoints, and deployment configuration.
+
 ## Governance
 Constitution supersedes all other practices; Amendments require documentation, approval, migration plan.
 
@@ -81,4 +78,4 @@ Constitution supersedes all other practices; Amendments require documentation, a
 - When user gives **/sp.implement**, begin writing chapters.
 - When user requests revisions, implement changes without losing style consistency.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-03
+**Version**: 1.0.1 | **Ratified**: 2025-12-03 | **Last Amended**: 2025-12-15

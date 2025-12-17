@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  title: Frontend ChatKit Integration API
+  description: API contracts for the ChatKit frontend integration with Docusaurus documentation site
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://your-backend-domain.com
+    description: Production server
+
+paths:
+  /api/v1/chat:
+    post:
+      summary: Send a message to the RAG chat system
+      description: Submit a user message and receive a response from the RAG system based on the entire documentation corpus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+                  description: The user's message or question
+                  example: "What are the key principles of humanoid locomotion?"
+                threadId:
+                  type: string
+                  description: Optional thread ID to continue an existing conversation
+                  example: "thread-12345"
+      responses:
+        '200':
+          description: Successful response from the chat system
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - answer
+                  - threadId
+                properties:
+                  answer:
+                    type: string
+                    description: The system's response to the user's message
+                    example: "Humanoid locomotion is based on several key principles including..."
+                  threadId:
+                    type: string
+                    description: The thread ID for the conversation (new or existing)
+                    example: "thread-12345"
+                  sources:
+                    type: array
+                    description: Optional list of source documents used in the response
+                    items:
+                      type: string
+                    example: ["control_systems.md", "humanoid_robots.md"]
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/chat/selected-text:
+    post:
+      summary: Send a message with selected text context
+      description: Submit a user message about selected text and receive a response constrained to that context
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+                - selectedText
+              properties:
+                message:
+                  type: string
+                  description: The user's question about the selected text
+                  example: "Can you explain this concept further?"
+                selectedText:
+                  type: string
+                  description: The text that was selected by the user
+                  example: "The principle of dynamic balance in humanoid robots involves maintaining the center of mass within the support polygon..."
+                threadId:
+                  type: string
+                  description: Optional thread ID to continue an existing conversation
+                  example: "thread-12345"
+      responses:
+        '200':
+          description: Successful response from the chat system
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - answer
+                  - threadId
+                properties:
+                  answer:
+                    type: string
+                    description: The system's response to the user's message based on selected text
+                    example: "The concept refers to..."
+                  threadId:
+                    type: string
+                    description: The thread ID for the conversation (new or existing)
+                    example: "thread-12345"
+        '400':
+          description: Bad request - invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: "BadRequest"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Message field is required"

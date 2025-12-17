@@ -1,0 +1,164 @@
+# RAG Chatbot Ingestion API Contract
+
+## Overview
+This document defines the API contract for the RAG Chatbot data ingestion pipeline. This API enables the processing of markdown documents from the book-site/docs directory and their storage in the Qdrant vector database.
+
+## Base URL
+`http://localhost:8000/api/v1` (or production equivalent)
+
+## Endpoints
+
+### POST /ingest
+Trigger the document ingestion process from book-site/docs directory.
+
+**Request**:
+```json
+{
+  "docs_path": "book-site/docs",
+  "chunk_size": 1000,
+  "chunk_overlap": 200,
+  "recreate_collection": false
+}
+```
+
+**Response (202 Accepted)**:
+```json
+{
+  "job_id": "uuid-string",
+  "status": "started",
+  "estimated_duration_seconds": 300,
+  "total_files_found": 42,
+  "message": "Ingestion process started successfully"
+}
+```
+
+**Response (400 Bad Request)**:
+```json
+{
+  "error": "Invalid configuration",
+  "details": "Chunk size must be between 100 and 2000"
+}
+```
+
+### GET /ingest/{job_id}
+Get the status of an ingestion job.
+
+**Response (200 OK)**:
+```json
+{
+  "job_id": "uuid-string",
+  "status": "processing|completed|failed",
+  "progress": {
+    "total_files": 42,
+    "processed_files": 25,
+    "total_chunks": 150,
+    "processed_chunks": 89,
+    "completed_percentage": 59.5
+  },
+  "started_at": "2025-12-15T10:30:00Z",
+  "completed_at": "2025-12-15T10:32:45Z",
+  "error": null
+}
+```
+
+### POST /search
+Perform semantic search against the vector database.
+
+**Request**:
+```json
+{
+  "query": "What are the key components of humanoid robotics?",
+  "limit": 5,
+  "min_score": 0.5
+}
+```
+
+**Response (200 OK)**:
+```json
+{
+  "query": "What are the key components of humanoid robotics?",
+  "results": [
+    {
+      "score": 0.85,
+      "text": "The key components of humanoid robotics include actuators, sensors, control systems, and AI algorithms...",
+      "metadata": {
+        "source_file": "components.md",
+        "relative_path": "chapters/components.md"
+      }
+    }
+  ],
+  "search_time_ms": 45
+}
+```
+
+### GET /stats
+Get statistics about the vector database content.
+
+**Response (200 OK)**:
+```json
+{
+  "total_chunks": 1250,
+  "total_documents": 42,
+  "total_tokens": 1250000,
+  "last_ingestion": "2025-12-15T10:32:45Z",
+  "collection_name": "documentation_book"
+}
+```
+
+## Error Responses
+All endpoints may return standard error responses:
+
+**400 Bad Request**:
+```json
+{
+  "error": "client_error",
+  "message": "Human-readable error message",
+  "details": "Additional details about the error"
+}
+```
+
+**500 Internal Server Error**:
+```json
+{
+  "error": "server_error",
+  "message": "An unexpected error occurred"
+}
+```
+
+## Authentication
+All endpoints require API key authentication via header:
+```
+Authorization: Bearer {api_key}
+```
+
+## Data Models
+
+### Document Chunk
+```json
+{
+  "id": "uuid-string",
+  "text": "Text content of the chunk",
+  "embedding": [0.1, 0.2, 0.3, ...], // 768-dimensional vector
+  "metadata": {
+    "source_file": "filename.md",
+    "relative_path": "path/to/file.md",
+    "full_path": "/full/path/to/file.md"
+  },
+  "size": 1024
+}
+```
+
+### Ingestion Job Status
+```json
+{
+  "job_id": "uuid-string",
+  "status": "processing|completed|failed",
+  "progress": {
+    "total_files": 0,
+    "processed_files": 0,
+    "total_chunks": 0,
+    "processed_chunks": 0,
+    "completed_percentage": 0.0
+  }
+}
+```

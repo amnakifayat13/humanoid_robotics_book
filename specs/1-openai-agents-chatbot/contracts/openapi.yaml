@@ -1,0 +1,245 @@
+openapi: 3.0.3
+info:
+  title: OpenAI Agents RAG Chatbot API
+  description: API for interacting with the RAG chatbot system that uses OpenAI Agents SDK to process documentation queries
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.chatbot.example.com
+    description: Production server
+
+paths:
+  /:
+    get:
+      summary: API Information
+      description: Returns API information and links to documentation
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: "OpenAI Agents RAG Chatbot API"
+                  version:
+                    type: string
+                    example: "1.0.0"
+                  description:
+                    type: string
+                    example: "API for RAG chatbot with documentation search capabilities"
+                  docs_url:
+                    type: string
+                    example: "/docs"
+                  health_url:
+                    type: string
+                    example: "/api/v1/health"
+
+  /api/v1/health:
+    get:
+      summary: Health Check
+      description: Check the health status of the chatbot service
+      responses:
+        '200':
+          description: Health status information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /api/v1/chat:
+    post:
+      summary: Chat with Documentation Agent
+      description: Send a message to the documentation RAG agent for answers with source citations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Chat response with answer and sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/chat/selected-text:
+    post:
+      summary: Chat with Selected Text Agent
+      description: Send a message with selected text context to get answers only from the provided text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectedTextChatRequest'
+      responses:
+        '200':
+          description: Chat response with answer (no sources since only using provided text)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The user's message or question
+          example: "How does the kinematic chain work in humanoid robots?"
+        thread_id:
+          type: string
+          description: Optional thread identifier for conversation context
+          example: "thread_abc123"
+      example:
+        message: "How does the kinematic chain work in humanoid robots?"
+        thread_id: "thread_abc123"
+
+    SelectedTextChatRequest:
+      type: object
+      required:
+        - message
+        - selected_text
+      properties:
+        message:
+          type: string
+          description: The user's question about the selected text
+          example: "What are the key parameters mentioned here?"
+        selected_text:
+          type: string
+          description: The text selected by the user
+          example: "The kinematic chain in humanoid robots consists of multiple joints and links..."
+        thread_id:
+          type: string
+          description: Optional thread identifier for conversation context
+          example: "thread_abc123"
+      example:
+        message: "What are the key parameters mentioned here?"
+        selected_text: "The kinematic chain in humanoid robots consists of multiple joints and links..."
+        thread_id: "thread_abc123"
+
+    ChatResponse:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          type: string
+          description: The agent's response to the user's question
+          example: "The kinematic chain in humanoid robots consists of multiple joints and links that work together..."
+        thread_id:
+          type: string
+          description: Thread identifier for conversation context
+          example: "thread_abc123"
+        sources:
+          type: array
+          description: List of source citations (empty for selected text queries)
+          items:
+            type: object
+            properties:
+              source_file:
+                type: string
+                description: Name of the source file
+                example: "kinematics.md"
+              relative_path:
+                type: string
+                description: Relative path to the source file
+                example: "/docs/kinematics.md"
+              score:
+                type: number
+                description: Relevance score of the source
+                example: 0.85
+              content:
+                type: string
+                description: Excerpt from the source
+                example: "The kinematic chain consists of multiple joints and links..."
+          example:
+            - source_file: "kinematics.md"
+              relative_path: "/docs/kinematics.md"
+              score: 0.85
+              content: "The kinematic chain consists of multiple joints and links..."
+      example:
+        answer: "The kinematic chain in humanoid robots consists of multiple joints and links that work together..."
+        thread_id: "thread_abc123"
+        sources:
+          - source_file: "kinematics.md"
+            relative_path: "/docs/kinematics.md"
+            score: 0.85
+            content: "The kinematic chain consists of multiple joints and links..."
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: string
+          description: Health status of the service
+          enum: [healthy, degraded, unhealthy]
+          example: "healthy"
+        message:
+          type: string
+          description: Descriptive message about the health status
+          example: "Service is operating normally"
+      example:
+        status: "healthy"
+        message: "Service is operating normally"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type or code
+          example: "BAD_REQUEST"
+        message:
+          type: string
+          description: Detailed error message
+          example: "Request body is malformed or missing required fields"
+      example:
+        error: "BAD_REQUEST"
+        message: "Request body is malformed or missing required fields"
